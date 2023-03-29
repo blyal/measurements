@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Measurements</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Measurements</h1>
+      <div class="authorship">
+        <h2>By Network Strategies Limited</h2>
+        <h6>Copyright &copy; 2023 Network Strategies</h6>
+      </div>
+    </header>
+
+    <section class="isolated-button-section">
+      <div class="button-container">
+        <button class="button" id="downloadButton">Download Test Data</button>
+      </div>
+      <div class="download-explanation-container">
+        <p>
+          Download the CSV files containing current data for all tests to date
+          (or since last deletion)
+        </p>
+      </div>
+    </section>
+
+    <section class="main">
+      <article class="tool">
+        <div class="tool-header">
+          <h3 id="toolTitle">ICMP Ping | File Download over HTTP/TCP</h3>
+          <p class="status">Status: <span id="tool-status">Idle</span></p>
+        </div>
+        <div class="tool-body">
+          <div class="tool-body-child">
+            <div class="configure-test">
+              <h5>Configure Tests</h5>
+              <div class="configuration-elements">
+                <div class="configuration-element">
+                  <div class="label-wrapper">
+                    <label for="testLabel" class="required">Test Label:</label>
+                  </div>
+                  <input id="testLabel" type="text" />
+                </div>
+                <div class="configuration-element">
+                  <div class="label-wrapper">
+                    <label for="remoteEndpoint" class="required"
+                      >Remote Endpoint:</label
+                    >
+                  </div>
+                  <select id="remoteEndpoint">
+                    <option value="australia" selected>Australia</option>
+                    <option value="southafrica">South Africa</option>
+                  </select>
+                </div>
+                <div class="configuration-element">
+                  <div class="label-wrapper">
+                    <label for="testingLocation" class="required"
+                      >Testing Location:</label
+                    >
+                  </div>
+                  <select id="testingLocation">
+                    <option value="mahe" selected>Mahe</option>
+                    <option value="praslin">Praslin</option>
+                    <option value="ladigue">La Digue</option>
+                  </select>
+                </div>
+                <div class="configuration-element">
+                  <div class="label-wrapper">
+                    <label for="typeOfService" class="required"
+                      >Type of Service:</label
+                    >
+                  </div>
+                  <select id="typeOfService">
+                    <option value="unknown" selected>Unknown</option>
+                    <option value="dsl">DSL</option>
+                    <option value="fibre">fibre</option>
+                    <option value="fwa">FWA</option>
+                    <option value="cable">cable</option>
+                    <option value="4gmobile">4G mobile</option>
+                    <option value="5gmobile">5G mobile</option>
+                  </select>
+                </div>
+                <div class="configuration-element">
+                  <div class="label-wrapper">
+                    <label for="operator" class="required">Operator:</label>
+                  </div>
+                  <select id="operator">
+                    <option value="unknown" selected>Unknown</option>
+                    <option value="cws">CWS</option>
+                    <option value="airtel">Airtel</option>
+                    <option value="intelvision">Intelvision</option>
+                    <option value="kokonet">Kokonet</option>
+                  </select>
+                </div>
+                <div class="configuration-element icmp-element">
+                  <div class="label-wrapper">
+                    <label for="icmpTrialsQuant">ICMP Trials per Test:</label>
+                  </div>
+                  <input
+                    id="icmpTrialsQuant"
+                    type="number"
+                    min="0"
+                    max="100"
+                    value="100"
+                  />
+                </div>
+                <div class="configuration-element http-element">
+                  <div class="label-wrapper">
+                    <label for="httpTrialsQuant"
+                      >HTTP Trials per Test (for both Uplink and Downlink
+                      separately):</label
+                    >
+                  </div>
+                  <input
+                    id="httpTrialsQuant"
+                    type="number"
+                    min="0"
+                    max="100"
+                    value="100"
+                  />
+                </div>
+                <div class="configuration-element http-element">
+                  <div class="label-wrapper">
+                    <label for="httpAdvertisedRate"
+                      >Advertised Data Rate (Megabits per second):</label
+                    >
+                  </div>
+                  <input id="httpAdvertisedRate" type="number" min="0" />
+                </div>
+                <div class="configuration-element">
+                  <div class="label-wrapper">
+                    <label for="testsTimeout" class="required"
+                      >Overall Time Limit (mins):</label
+                    >
+                  </div>
+                  <input id="testsTimeout" type="number" min="1" value="1" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tool-body-child button-container">
+            <button class="button" id="testButton">
+              <span id="runTestsText">Run Tests</span>
+              <div class="loading hidden">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+              </div>
+            </button>
+            <button class="button removed" id="resetButton">Reset</button>
+          </div>
+          <div class="tool-body-child results removed">
+            <h4><span id="elementResultsLabel"></span> Results:</h4>
+            <h4 class="icmp-element">
+              <span id="elementICMPTrialsAttempted">0</span> ICMP trials
+              attempted (<span id="elementICMPTrialsSuccessful">0</span>
+              successful)
+            </h4>
+            <h4 class="http-element">
+              <span id="elementHttpUpTrialsAttempted">0</span> HTTP uplink
+              trials attempted (<span id="elementHttpUpTrialsSuccessful"
+                >0</span
+              >
+              successful)
+            </h4>
+            <h4 class="http-element">
+              <span id="elementHttpDownTrialsAttempted">0</span> HTTP downlink
+              trials attempted (<span id="elementHttpDownTrialsSuccessful"
+                >0</span
+              >
+              successful)
+            </h4>
+            <div class="results-drilldown">
+              <p>Tests Started: <span id="elementTestStartTime">Error</span></p>
+              <p>
+                Total time elapsed: <span id="elementTimeElapsed">Error</span>
+              </p>
+              <p class="icmp-element">
+                Latency (ms): <span id="elementLatency">-</span>
+              </p>
+              <p class="icmp-element">
+                Min RTT (ms): <span id="elementMinRTT">-</span>
+              </p>
+              <p class="icmp-element">
+                Max RTT (ms): <span id="elementMaxRTT">-</span>
+              </p>
+              <p class="icmp-element">
+                Packet Loss Ratio (%):
+                <span id="elementPacketLossRatio">-</span>
+              </p>
+              <p class="http-element">
+                Mean time per successful uplink trial (ms):
+                <span id="elementMeanUpHttpTime">-</span>
+              </p>
+              <p class="http-element">
+                Min successful uplink trial time (ms):
+                <span id="elementMinUpHttpTime">-</span>
+              </p>
+              <p class="http-element">
+                Max successful uplink trial time (ms):
+                <span id="elementMaxUpHttpTime">-</span>
+              </p>
+              <p class="http-element">
+                Uplink Throughput (%): <span id="elementUpThroughput">-</span>
+              </p>
+              <p class="http-element">
+                Uplink Unsuccessful file access ratio (%):
+                <span id="elementUpUnsuccessfulFileAccess">-</span>
+              </p>
+              <p class="http-element">
+                Mean time per successful downlink trial (ms):
+                <span id="elementMeanDownHttpTime">-</span>
+              </p>
+              <p class="http-element">
+                Min successful downlink trial time (ms):
+                <span id="elementMinDownHttpTime">-</span>
+              </p>
+              <p class="http-element">
+                Max successful downlink trial time (ms):
+                <span id="elementMaxDownHttpTime">-</span>
+              </p>
+              <p class="http-element">
+                Downlink Throughput (%):
+                <span id="elementDownThroughput">-</span>
+              </p>
+              <p class="http-element">
+                Downlink Unsuccessful file access ratio (%):
+                <span id="elementDownUnsuccessfulFileAccess">-</span>
+              </p>
+              <p>
+                Test Notes:
+                <span id="elementTestNotes">None</span>
+              </p>
+            </div>
+          </div>
+          <div class="tool-footer results removed">
+            <!-- <div>
+              <div class="label-wrapper">
+                <label for="csv-path">CSV File Path:</label>
+              </div>
+              <input id="csv-path" type="text" />
+            </div> -->
+            <div class="csv-export-container button-container">
+              <button class="button yellow-button" id="appendToCsv">
+                Append Results to CSVs
+              </button>
+            </div>
+          </div>
+        </div>
+      </article>
+    </section>
+    <section class="isolated-button-section delete-csv-section">
+      <div class="button-container">
+        <button class="button" id="deleteCsvButton">Delete CSV Files</button>
+      </div>
+    </section>
+    <section class="pop-up removed" id="csvCheckPopUp">
+      <div class="pop-up-interior">
+        <p>
+          Please ensure you have appended the results to CSV before continuing
+        </p>
+        <br /><br />
+        <div class="csv-check-buttons">
+          <button class="button" id="cancelRefresh">
+            I still need to append the results to CSV
+          </button>
+          <button class="button" id="proceedRefresh">
+            I have already appended to CSV or It's Not Necessary
+          </button>
+        </div>
+      </div>
+    </section>
+    <section class="pop-up removed" id="csvAppendResultPopUp">
+      <div class="pop-up-interior">
+        <p id="csvAppendResult">Results of CSV Append Should Show Here</p>
+        <br /><br />
+        <div>
+          <button class="button" id="acknowledgeCsvAppendResult">Ok</button>
+        </div>
+      </div>
+    </section>
+    <section class="pop-up removed" id="deleteCsvPopUp">
+      <div class="pop-up-interior">
+        <p>
+          Are you sure? This action will delete the CSV files and all associated
+          data will be lost. Please ensure you have downloaded the CSV files
+          before continuing
+        </p>
+        <br /><br />
+        <div class="csv-check-buttons">
+          <button class="button" id="cancelDelete">
+            Cancel! I don't want to delete it
+          </button>
+          <button class="button" id="proceedDelete">
+            I understand the consequences. Proceed with delete action
+          </button>
+        </div>
+      </div>
+    </section>
+    <script src="app.js"></script>
+  </body>
+</html>
