@@ -104,6 +104,12 @@ let dataForSending;
 let httpUplinkTrialRecords = [];
 let httpDownlinkTrialRecords = [];
 
+// Enum Objects
+const ERROR_TYPES = {
+  ABORT: 'ABORT',
+  UNKNOWN: 'UNKNOWN',
+};
+
 // Initialise State and HTML
 downloadTestFile();
 
@@ -237,7 +243,13 @@ async function downloadTestFile(
     }
     return { data, status: response.status };
   } catch (error) {
-    console.error(error);
+    if (error.name === 'AbortError') {
+      console.log('Trial failed due to speed error');
+      return ERROR_TYPES.ABORT;
+    } else {
+      console.error('Error downloading file from server: ', error);
+      return ERROR_TYPES.UNKNOWN;
+    }
   }
 }
 
@@ -254,33 +266,39 @@ async function downlinkTrial(remoteEndpoint) {
   try {
     const trial = await downloadTestFile(remoteEndpoint, signal);
     const endTime = performance.now();
-    const trialResult = {
-      trialTimeInMs: endTime - startTime,
-      trialResult: trial.status === 200 ? 'success' : 'error',
-    };
-    httpDownlinkTrialRecords.push({
-      trialNumber: httpDownlinkTrialRecords.length + 1,
-      ...trialResult,
-    });
-    return trialResult;
-  } catch (error) {
-    if (error.name === 'AbortError') {
-      console.log('Trial failed due to speed error');
-      const trialResult = { trialTimeInMs: 120000, trialResult: 'failed' };
+    if (trial === ERROR_TYPES.ABORT) {
+      const trialResult = { trialTimeInMs: 120000, trialResult: 'timeout' };
       httpDownlinkTrialRecords.push({
         trialNumber: httpDownlinkTrialRecords.length + 1,
         ...trialResult,
       });
       return trialResult;
-    } else {
-      console.error('Error downloading file from server: ', error);
+    } else if (trial === ERROR_TYPES.UNKNOWN) {
       const trialResult = { trialTimeInMs: null, trialResult: 'error' };
       httpDownlinkTrialRecords.push({
         trialNumber: httpDownlinkTrialRecords.length + 1,
         ...trialResult,
       });
       return trialResult;
+    } else {
+      const trialResult = {
+        trialTimeInMs: endTime - startTime,
+        trialResult: trial.status === 200 ? 'success' : 'error',
+      };
+      httpDownlinkTrialRecords.push({
+        trialNumber: httpDownlinkTrialRecords.length + 1,
+        ...trialResult,
+      });
+      return trialResult;
     }
+  } catch (error) {
+    console.error('There was an unknown error: ', error);
+    const trialResult = { trialTimeInMs: null, trialResult: 'error' };
+    httpDownlinkTrialRecords.push({
+      trialNumber: httpDownlinkTrialRecords.length + 1,
+      ...trialResult,
+    });
+    return trialResult;
   }
 }
 
@@ -317,7 +335,7 @@ const uplinkTrial = async (remoteEndpoint) => {
     .catch((error) => {
       if (error.name === 'AbortError') {
         console.log('Trial failed due to speed error');
-        const trialResult = { trialTimeInMs: 120000, trialResult: 'failed' };
+        const trialResult = { trialTimeInMs: 120000, trialResult: 'timeout' };
         httpUplinkTrialRecords.push({
           trialNumber: httpUplinkTrialRecords.length + 1,
           ...trialResult,
