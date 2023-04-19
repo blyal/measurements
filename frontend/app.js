@@ -743,6 +743,9 @@ function resetTool() {
   resetButton.classList.add('removed');
   testLabelInput.value = '';
   remoteEndpointInput.value = 'london';
+  testingLocationInput.value = 'mahe';
+  typeOfServiceInput.value = 'unknown';
+  operator.value = 'unknown';
   advertisedDataRateInput.value = '';
   icmpTrialsQuantityInput.value = 100;
   httpTrialsQuantityInput.value = 100;
