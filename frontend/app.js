@@ -90,12 +90,12 @@ const isDev = window.environment === 'development';
 const defaultRemoteEndpoint = isDev
   ? 'http://localhost:1414'
   : 'http://172.166.128.158:1414';
-const southAfricaRemoteEndpoint = 'http://20.164.230.156:1414';
+const parisRemoteEndpoint = 'http://51.103.36.227:1414';
 const getSelectedEndpoint = () => {
   if (isDev) return defaultRemoteEndpoint;
   return remoteEndpointInput.value === 'london'
     ? defaultRemoteEndpoint
-    : southAfricaRemoteEndpoint;
+    : parisRemoteEndpoint;
 };
 const downlinkFilePath = './get-file';
 let fileBlob;
