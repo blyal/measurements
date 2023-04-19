@@ -6,7 +6,9 @@ require('dotenv').config();
 const server = http.createServer();
 
 const isDev = process.env.NODE_ENV === 'development';
-const serverUrl = isDev ? 'http://localhost:1414' : 'http://4.196.218.4:1414';
+const serverUrl = isDev
+  ? 'http://localhost:1414'
+  : 'http://172.166.128.158:1414/';
 
 const fileSizeInBytes = 513024;
 
