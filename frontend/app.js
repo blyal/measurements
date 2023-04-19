@@ -383,6 +383,7 @@ const runTests = async () => {
   } else {
     // init
     updateTestStatus('Running');
+    toggleDisableInputs(true);
     runTestsButtonText.classList.add('hidden');
     loadingDotsContainer.classList.remove('hidden');
     const testLabel = testLabelInput.value;
@@ -567,6 +568,7 @@ const runTests = async () => {
       httpUplinkTrialData: httpUplinkTrialRecords,
       httpDownlinkTrialData: httpDownlinkTrialRecords,
     };
+    toggleDisableInputs(false);
   }
 };
 
@@ -731,6 +733,19 @@ const updateHTMLAfterTestFinished = (summary) => {
   resultsElements[0].classList.remove('removed');
   resultsElements[1].classList.remove('removed');
 };
+
+// Toggle Disable Inputs
+function toggleDisableInputs(boolean) {
+  testLabelInput.disabled = boolean;
+  remoteEndpointInput.disabled = boolean;
+  testingLocationInput.disabled = boolean;
+  typeOfServiceInput.disabled = boolean;
+  operator.disabled = boolean;
+  advertisedDataRateInput.disabled = boolean;
+  icmpTrialsQuantityInput.disabled = boolean;
+  httpTrialsQuantityInput.disabled = boolean;
+  runTimeoutInput.disabled = boolean;
+}
 
 // Reset Tool
 function resetTool() {
