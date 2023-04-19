@@ -262,12 +262,16 @@
         </p>
         <br /><br />
         <div class="csv-check-buttons">
-          <button class="button" id="cancelRefresh">
-            I still need to append the results to CSV
-          </button>
-          <button class="button" id="proceedRefresh">
-            I have already appended to CSV or It's Not Necessary
-          </button>
+          <div class="button-container">
+            <button class="button popup-button-cancel" id="cancelRefresh">
+              I still need to append the results to CSV
+            </button>
+          </div>
+          <div class="button-container button-container-delete">
+            <button class="button popup-button-proceed" id="proceedRefresh">
+              I have already appended to CSV or It's Not Necessary
+            </button>
+          </div>
         </div>
       </div>
     </section>
@@ -289,12 +293,16 @@
         </p>
         <br /><br />
         <div class="csv-check-buttons">
-          <button class="button" id="cancelDelete">
-            Cancel! I don't want to delete it
-          </button>
-          <button class="button" id="proceedDelete">
-            I understand the consequences. Proceed with delete action
-          </button>
+          <div class="button-container">
+            <button class="button popup-button-cancel" id="cancelDelete">
+              Cancel! I don't want to delete it
+            </button>
+          </div>
+          <div class="button-container button-container-delete">
+            <button class="button popup-button-proceed" id="proceedDelete">
+              I understand the consequences. Proceed with delete action
+            </button>
+          </div>
         </div>
       </div>
     </section>

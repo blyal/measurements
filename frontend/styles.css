@@ -217,18 +217,15 @@ p {
   margin-top: -25px;
 }
 
-#deleteCsvButton,
-#cancelDelete {
+#deleteCsvButton {
   background-color: #cc3333;
 }
 
-#deleteCsvButton:hover,
-#cancelDelete:hover {
+#deleteCsvButton:hover {
   background-color: #ff3333;
 }
 
-#deleteCsvButton:active,
-#cancelDelete:active {
+#deleteCsvButton:active {
   color: black;
   background-color: #cc3333;
 }
@@ -259,22 +256,67 @@ p {
   flex-direction: column;
 }
 
+.csv-check-buttons .button-container {
+  margin: 0.5% 0;
+  border: 2px solid #003366;
+}
+
+.csv-check-buttons .button-container:hover {
+  border: 2px solid #002346;
+}
+
+.csv-check-buttons .button-container:active {
+  border: 2px solid #003366;
+}
+
 .csv-check-buttons button {
   border-radius: 0;
+  width: 100%;
+}
+
+.csv-check-buttons .button-container-delete {
+  border: 2px solid #c5c4c4;
   margin: 0.5% 0;
 }
 
-#cancelRefresh {
-  background-color: #cc3333;
+.csv-check-buttons .button-container-delete:hover {
+  border: 2px solid #f3f3f3;
 }
 
-#cancelRefresh:hover {
-  background-color: #ff3333;
+.csv-check-buttons .button-container-delete:active {
+  border: 2px solid #c5c4c4;
 }
 
-#cancelRefresh:active {
+.csv-check-buttons .button-container-delete button {
+  margin: 0;
+}
+
+.popup-button-proceed {
   color: black;
-  background-color: #cc3333;
+  background-color: #c5c4c4;
+  border: 4px solid #003366;
+}
+
+.popup-button-proceed:hover {
+  color: #cc3333;
+  background-color: #f3f3f3;
+}
+
+.popup-button-proceed:active {
+  color: #cc3333;
+  background-color: #c5c4c4;
+}
+
+.popup-button-cancel {
+  border: 4px solid #003366;
+}
+
+.popup-button-cancel:hover {
+  border: 4px solid #002346;
+}
+
+.popup-button-cancel:active {
+  border: 4px solid #003366;
 }
 
 .loading {
