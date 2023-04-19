@@ -89,11 +89,11 @@ const localICMPServer = 'http://localhost:1010';
 const isDev = window.environment === 'development';
 const defaultRemoteEndpoint = isDev
   ? 'http://localhost:1414'
-  : 'http://4.196.218.4:1414';
+  : 'http://172.166.128.158:1414';
 const southAfricaRemoteEndpoint = 'http://20.164.230.156:1414';
 const getSelectedEndpoint = () => {
   if (isDev) return defaultRemoteEndpoint;
-  return remoteEndpointInput.value === 'australia'
+  return remoteEndpointInput.value === 'london'
     ? defaultRemoteEndpoint
     : southAfricaRemoteEndpoint;
 };
@@ -742,7 +742,7 @@ function resetTool() {
   runTestsButton.classList.remove('removed');
   resetButton.classList.add('removed');
   testLabelInput.value = '';
-  remoteEndpointInput.value = 'australia';
+  remoteEndpointInput.value = 'london';
   advertisedDataRateInput.value = '';
   icmpTrialsQuantityInput.value = 100;
   httpTrialsQuantityInput.value = 100;
