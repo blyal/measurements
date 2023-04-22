@@ -612,10 +612,10 @@ const timeElapsed = (minutesElapsedUnrounded, secondsElapsedUnrounded) => {
     return 'There was an error with the test';
   }
 
-  const minutesElapsed = Math.round(minutesElapsedUnrounded);
+  const minutesElapsed = Math.floor(minutesElapsedUnrounded);
   const secondsElapsed = Math.round(secondsElapsedUnrounded);
 
-  if (minutesElapsed === 0 && secondsElapsed === 0) {
+  if (minutesElapsedUnrounded === 0 && secondsElapsed === 0) {
     return '<1 second';
   }
 
