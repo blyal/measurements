@@ -230,6 +230,12 @@ p {
   background-color: #cc3333;
 }
 
+.footer {
+  margin-top: 50px;
+  padding: 15px;
+  border-top: 1px solid #e5e5e5;
+}
+
 .pop-up {
   position: fixed;
   z-index: 10;
