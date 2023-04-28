@@ -399,7 +399,7 @@ const runTests = async () => {
     const advertisedHttpDataRateInMegabitsPerSec =
       +advertisedDataRateInput.value;
     const advertisedHttpDataRateInBitsPerMs =
-      advertisedHttpDataRateInMegabitsPerSec * 1000000 * 1000;
+      (advertisedHttpDataRateInMegabitsPerSec * 1000000) / 1000;
     const remoteEndpoint = getSelectedEndpoint();
     let icmpResults;
     const httpResults = [];
