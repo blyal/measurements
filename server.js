@@ -31,7 +31,8 @@ const requestListener = async (req, res) => {
   res.setHeader('Access-Control-Allow-Private-Network', true);
   res.setHeader('Access-Control-Allow-Credentials', 'true');
   res.setHeader('Access-Control-Max-Age', '86400');
-  res.setHeader('Connection', 'close');
+  // Force close TCP connection
+  // res.setHeader('Connection', 'close');
   if (req.method === 'OPTIONS') {
     // Preflight request
     res.writeHead(200);
