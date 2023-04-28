@@ -225,7 +225,8 @@ async function getICMPTestResults() {
 // Download File
 async function downloadTestFile(
   remoteEndpoint = defaultRemoteEndpoint,
-  signal
+  signal,
+  runTimeIsLowerThanTrialTimeout
 ) {
   try {
     const response = await fetch(`${remoteEndpoint}/${downlinkFilePath}`, {
@@ -243,7 +244,10 @@ async function downloadTestFile(
     }
     return { data, status: response.status };
   } catch (error) {
-    if (error.name === 'AbortError') {
+    if (error.name === 'AbortError' && runTimeIsLowerThanTrialTimeout) {
+      console.log('Trial cancelled due to run timeout');
+      return ERROR_TYPES.ABORT;
+    } else if (error.name === 'AbortError') {
       console.log('Trial failed due to speed error');
       return ERROR_TYPES.ABORT;
     } else {
@@ -254,19 +258,27 @@ async function downloadTestFile(
 }
 
 // Downlink Trial
-async function downlinkTrial(remoteEndpoint) {
+async function downlinkTrial(remoteEndpoint, remainingTime) {
   const controller = new AbortController();
   const signal = controller.signal;
   const startTime = performance.now();
+  const timeoutForRequest = Math.min(remainingTime, 120000);
+  const trialTimeoutIsDueToRunTimeout = timeoutForRequest < 120000;
 
   setTimeout(() => {
     controller.abort();
-  }, 120000);
+  }, timeoutForRequest);
 
   try {
-    const trial = await downloadTestFile(remoteEndpoint, signal);
+    const trial = await downloadTestFile(
+      remoteEndpoint,
+      signal,
+      trialTimeoutIsDueToRunTimeout
+    );
     const endTime = performance.now();
-    if (trial === ERROR_TYPES.ABORT) {
+    if (trial === ERROR_TYPES.ABORT && trialTimeoutIsDueToRunTimeout) {
+      return null;
+    } else if (trial === ERROR_TYPES.ABORT) {
       const trialResult = { trialTimeInMs: 120000, trialResult: 'timeout' };
       httpDownlinkTrialRecords.push({
         trialNumber: httpDownlinkTrialRecords.length + 1,
@@ -303,14 +315,16 @@ async function downlinkTrial(remoteEndpoint) {
 }
 
 // Uplink Trial
-const uplinkTrial = async (remoteEndpoint) => {
+const uplinkTrial = async (remoteEndpoint, remainingTime) => {
   const controller = new AbortController();
   const signal = controller.signal;
   const startTime = performance.now();
+  const timeoutForRequest = Math.min(remainingTime, 120000);
+  const trialTimeoutIsDueToRunTimeout = timeoutForRequest < 120000;
 
   setTimeout(() => {
     controller.abort();
-  }, 120000);
+  }, timeoutForRequest);
 
   return fetch(`${remoteEndpoint}/uplink`, {
     method: 'POST',
@@ -333,7 +347,10 @@ const uplinkTrial = async (remoteEndpoint) => {
       return trialResult;
     })
     .catch((error) => {
-      if (error.name === 'AbortError') {
+      if (error.name === 'AbortError' && trialTimeoutIsDueToRunTimeout) {
+        console.log('Trial cancelled due to run timeout');
+        return null;
+      } else if (error.name === 'AbortError') {
         console.log('Trial failed due to speed error');
         const trialResult = { trialTimeInMs: 120000, trialResult: 'timeout' };
         httpUplinkTrialRecords.push({
@@ -405,7 +422,8 @@ const runTests = async () => {
     const httpResults = [];
 
     // data config
-    const testUTCStartTime = new Date().toUTCString();
+    const testStartTime = new Date();
+    const testUTCStartTime = testStartTime.toUTCString();
 
     // run timeout
     const timeout = setTimeout(() => {
@@ -420,10 +438,13 @@ const runTests = async () => {
       if (!isRunning) {
         break;
       }
+      const currentTime = new Date();
+      const elapsedTime = currentTime - testStartTime;
+      const remainingTime = runTimeoutInMs - elapsedTime;
       if (i % 2 === 1) {
-        const { trialTimeInMs, trialResult } = await uplinkTrial(
-          remoteEndpoint
-        );
+        const result = await uplinkTrial(remoteEndpoint, remainingTime);
+        if (!result) break;
+        const { trialTimeInMs, trialResult } = result;
         const trialData = {
           testUTCStartTime,
           testLabel,
@@ -434,9 +455,9 @@ const runTests = async () => {
         };
         httpResults.push(trialData);
       } else {
-        const { trialTimeInMs, trialResult } = await downlinkTrial(
-          remoteEndpoint
-        );
+        const result = await downlinkTrial(remoteEndpoint, remainingTime);
+        if (!result) break;
+        const { trialTimeInMs, trialResult } = result;
         const trialData = {
           testUTCStartTime,
           testLabel,
