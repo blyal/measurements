@@ -191,10 +191,11 @@ async function downloadCsvFiles() {
 }
 
 // Start ICMP trials
-function runICMPTest(numberOfTrials, remoteEndpointForTest) {
+function runICMPTest(numberOfTrials, remoteEndpointForTest, runTimeoutInMs) {
   let body = JSON.stringify({
     numberOfTrials,
     remoteEndpointForTest,
+    runTimeoutInMs,
   });
   try {
     fetch(`${localICMPServer}/start-ping-test`, {
@@ -431,7 +432,7 @@ const runTests = async () => {
     }, runTimeoutInMs);
 
     // call the localserver to conduct the ICMP trials
-    runICMPTest(numberOfIcmpTrials, remoteEndpoint);
+    runICMPTest(numberOfIcmpTrials, remoteEndpoint, runTimeoutInMs);
 
     // loop for sending the HTTP calls
     for (let i = 0; i < numberOfHttpTrials; i++) {

@@ -107,11 +107,21 @@ function provider(
   });
 }
 
-async function runPingTest(numberOfTrials, remoteEndpoint) {
+async function runPingTest(numberOfTrials, remoteEndpoint, runTimeoutInMs) {
   console.log(remoteEndpoint);
   remoteEndpoint = remoteEndpoint.replace('http://', '').replace(':1414', '');
   pingTestResults = [];
+  let isRunning = true;
+
+  // run timeout
+  const timeout = setTimeout(() => {
+    isRunning = false;
+  }, runTimeoutInMs);
+
   for (let i = 0; i < numberOfTrials; i++) {
+    if (!isRunning) {
+      break;
+    }
     try {
       const pingResult = await new Promise((resolve) => {
         const pingSession = ping.promise.probe(remoteEndpoint, {
@@ -128,7 +138,6 @@ async function runPingTest(numberOfTrials, remoteEndpoint) {
 
         pingSession.then((response) => {
           clearTimeout(timeoutId);
-
           const result = {
             trialNumber: pingTestResults.length + 1,
             trialTimeInMs: response.time,
@@ -175,6 +184,7 @@ async function runPingTest(numberOfTrials, remoteEndpoint) {
       pingTestResults.push(result);
     }
   }
+  clearTimeout(timeout);
 }
 
 server.on('request', requestListener);
