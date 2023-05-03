@@ -502,7 +502,15 @@ const runTests = async () => {
     ).length;
 
     let testSummary = {
-      testLocalStartTime: testLocalStartTime.toLocaleString(),
+      testLocalStartTime: testLocalStartTime.toLocaleString('en-NZ', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false,
+      }),
       timeElapsed: timeElapsed(
         minutesElapsedUnrounded,
         secondsRemainderElapsedUnrounded
