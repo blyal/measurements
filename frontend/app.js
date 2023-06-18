@@ -1,4 +1,5 @@
 // HTML Elements
+const toolVersionNumberDisplay = document.getElementById('toolVersionDisplay');
 const downloadButton = document.getElementById('downloadButton');
 const toolTitle = document.getElementById('toolTitle');
 const toolStatusElement = document.getElementById('tool-status');
@@ -75,7 +76,7 @@ const elementCsvAppendResultPopUp = document.getElementById(
   'csvAppendResultPopUp'
 );
 const elementsCsvAppendResult = document.getElementById('csvAppendResult');
-const deleteCsvButton = document.getElementById('deleteCsvButton');
+// const deleteCsvButton = document.getElementById('deleteCsvButton');
 const elementDeleteCsvPopUp = document.getElementById('deleteCsvPopUp');
 const cancelDeleteCsvButton = document.getElementById('cancelDelete');
 const proceedDeleteCsvButton = document.getElementById('proceedDelete');
@@ -83,6 +84,7 @@ const icmpElements = document.getElementsByClassName('icmp-element');
 const httpElements = document.getElementsByClassName('http-element');
 
 // State
+const toolVersionNumber = '1.1.0';
 const fileSizeInBytes = 513024;
 const fileSizeInBits = 4104192;
 const localICMPServer = 'http://localhost:1010';
@@ -112,6 +114,7 @@ const ERROR_TYPES = {
 
 // Initialise State and HTML
 downloadTestFile();
+toolVersionNumberDisplay.innerHTML = toolVersionNumber;
 
 // Update State
 const updateTestStatus = (newStatus) => {
@@ -593,6 +596,7 @@ const runTests = async () => {
         typeOfService: typeOfServiceInput.value,
         operator: operatorInput.value,
         advertisedDataRate: advertisedHttpDataRateInMegabitsPerSec,
+        toolVersionNumber,
       },
       icmpTrialData: icmpResults,
       httpUplinkTrialData: httpUplinkTrialRecords,
@@ -838,9 +842,9 @@ acknowledgeCsvAppendResultButton.addEventListener('click', () => {
   elementCsvAppendResultPopUp.classList.add('removed');
   elementsCsvAppendResult.innerHTML = 'Results of CSV Append Should Show Here';
 });
-deleteCsvButton.addEventListener('click', () => {
-  elementDeleteCsvPopUp.classList.remove('removed');
-});
+// deleteCsvButton.addEventListener('click', () => {
+//   elementDeleteCsvPopUp.classList.remove('removed');
+// });
 cancelDeleteCsvButton.addEventListener('click', () => {
   elementDeleteCsvPopUp.classList.add('removed');
 });
